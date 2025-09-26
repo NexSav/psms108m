@@ -15,7 +15,8 @@ import {
 } from '@heroicons/react/24/outline';
 
 const Home = () => {
-  // removed isVisible state because animations use attribute selectors and don't depend on component state
+  // track which animated sections are visible on scroll
+  const [isVisible, setIsVisible] = useState({});
 
   useEffect(() => {
     const handleScroll = () => {
