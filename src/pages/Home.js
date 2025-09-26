@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { 
@@ -15,8 +15,8 @@ import {
 } from '@heroicons/react/24/outline';
 
 const Home = () => {
-  // track which animated sections are visible on scroll
-  const [isVisible, setIsVisible] = useState({});
+  // track which animated sections are visible on scroll (mutable ref to avoid unused state warning)
+  const isVisibleRef = useRef({});
 
   useEffect(() => {
     const handleScroll = () => {
@@ -25,7 +25,7 @@ const Home = () => {
         const rect = element.getBoundingClientRect();
         const isInView = rect.top < window.innerHeight && rect.bottom > 0;
         if (isInView) {
-          setIsVisible(prev => ({ ...prev, [index]: true }));
+          isVisibleRef.current = { ...isVisibleRef.current, [index]: true };
         }
       });
     };
