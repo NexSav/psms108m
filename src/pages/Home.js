@@ -7,7 +7,6 @@ import {
   UserIcon,
   DocumentTextIcon,
   CalendarIcon,
-  UsersIcon,
   PencilIcon,
   AcademicCapIcon,
   DeviceTabletIcon,
@@ -16,7 +15,7 @@ import {
 } from '@heroicons/react/24/outline';
 
 const Home = () => {
-  const [isVisible, setIsVisible] = useState({});
+  // removed isVisible state because animations use attribute selectors and don't depend on component state
 
   useEffect(() => {
     const handleScroll = () => {

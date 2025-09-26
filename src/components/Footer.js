@@ -92,14 +92,15 @@ const Footer = () => {
               <h4 className="text-lg font-display mb-6 text-white">Connect With Us</h4>
               <div className="flex space-x-4">
                 {['Facebook', 'Twitter', 'Instagram', 'LinkedIn'].map((social, index) => (
-                  <a
+                  <button
                     key={index}
-                    href="#"
+                    type="button"
+                    onClick={() => { /* placeholder for real link action */ }}
                     className="w-12 h-12 bg-white/10 hover:bg-brand-accent flex items-center justify-center transition-all duration-300 text-sm font-medium"
                     aria-label={social}
                   >
                     {social.charAt(0)}
-                  </a>
+                  </button>
                 ))}
               </div>
             </div>

@@ -41,14 +41,7 @@ const AlumniPage = () => (
   </div>
 );
 
-const PCCornerPage = () => (
-  <div className="pt-20 min-h-screen bg-gray-50 flex items-center justify-center">
-    <div className="text-center">
-      <h1 className="text-4xl font-bold text-brand-primary mb-4">Parent Coordinator Corner</h1>
-      <p className="text-brand-neutral">Parent resources, workshops, and volunteer opportunities...</p>
-    </div>
-  </div>
-);
+// Removed unused PCCornerPage placeholder (was causing eslint no-unused-vars warning)
 
 const LearningResourcesPage = () => (
   <div className="pt-20 min-h-screen bg-gray-50 flex items-center justify-center">
