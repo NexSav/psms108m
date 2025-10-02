@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { 
@@ -17,6 +17,11 @@ import {
 const Home = () => {
   // track which animated sections are visible on scroll (mutable ref to avoid unused state warning)
   const isVisibleRef = useRef({});
+  // lazy-load and buffering state for monthly news video
+  const [loadNewsVideo, setLoadNewsVideo] = useState(false);
+  const [isBuffering, setIsBuffering] = useState(false);
+  const newsVideoRef = useRef(null);
+  const newsContainerRef = useRef(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -37,6 +42,23 @@ const Home = () => {
     };
   }, []);
 
+  // IntersectionObserver: start loading the news video when the News & Events section scrolls into view
+  useEffect(() => {
+    if (!newsContainerRef.current) return;
+
+    const observer = new IntersectionObserver((entries, obs) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          setLoadNewsVideo(true);
+          obs.disconnect();
+        }
+      });
+    }, { threshold: 0.25 });
+
+    observer.observe(newsContainerRef.current);
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <main className="bg-white overflow-hidden">
       <Navbar />
@@ -52,7 +74,7 @@ const Home = () => {
             playsInline
             className="w-full h-full object-cover"
           >
-            <source src="/assets/vidoes/home/ps 108.mp4" type="video/mp4" />
+            <source src="/assets/videos/home/ps_108.mp4" type="video/mp4" />
             <div className="absolute inset-0 bg-brand-primary"></div>
           </video>
           {/* Enhanced overlay for better text readability */}
@@ -358,7 +380,7 @@ const Home = () => {
             
             {/* News & Announcements */}
             <div className="lg:col-span-2">
-              <div className="mb-12 relative">
+            <div className="mb-12 relative" ref={newsContainerRef}>
                 <div className="inline-flex items-center space-x-3 mb-6">
                   <div className="w-12 h-px bg-brand-primary"></div>
                   <div className="w-3 h-3 bg-brand-primary rounded-full animate-pulse"></div>
@@ -371,6 +393,44 @@ const Home = () => {
               </div>
 
               <div className="space-y-12">
+                {/* Monthly News Video - lazy loaded when this section comes into view */}
+                <div className="mb-8">
+                  <h3 className="text-xl font-display mb-4">Monthly Roundup</h3>
+                  <div className="bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
+                    {loadNewsVideo ? (
+                      <div className="relative">
+                        <video
+                          ref={newsVideoRef}
+                          controls
+                          preload="metadata"
+                          className="w-full h-auto"
+                          onWaiting={() => setIsBuffering(true)}
+                          onPlaying={() => setIsBuffering(false)}
+                          onCanPlay={() => setIsBuffering(false)}
+                        >
+                          <source src="/assets/videos/home/soa_news_first_day.mp4" type="video/mp4" />
+                          <track kind="captions" src="/assets/videos/home/soa_news_first_day.vtt" srcLang="en" label="English" />
+                          Your browser does not support the video tag.
+                        </video>
+                        {isBuffering && (
+                          <div className="absolute inset-0 flex items-center justify-center bg-white/60">
+                            <div className="loader">Loading…</div>
+                          </div>
+                        )}
+                      </div>
+                    ) : (
+                      <div className="w-full h-48 flex items-center justify-center bg-gray-50">
+                        <button
+                          type="button"
+                          className="btn-primary"
+                          onClick={() => setLoadNewsVideo(true)}
+                        >
+                          Load Monthly Roundup
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                </div>
                 {[
                   {
                     title: "Spring Literary Contest Results",
